@@ -1,6 +1,6 @@
-package interfaces;
+package org.example.interfaces;
 
-import org.example.Board;
+import org.example.models.Board;
 
 /**
  * This interface is meant to be implemented by board class
@@ -79,23 +79,6 @@ public interface BoardOperations {
      * @return
      */
     boolean hasEmptyCells();
-
-    /**
-     * Prints board to the console. Probably double for loop
-     * for rows and columns
-     */
-    void printBoard();
-
-    /**
-     * After adding a move to a copy of a board.
-     * This method should be used to add the previous one
-     */
-    void setPreviousCell();
-
-    /**
-     * After creating a copy of this board. The copy should be added as next board
-     */
-    void setNextBoard();
 
     /**
      * An array of child boards with all possible mark placements

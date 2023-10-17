@@ -1,18 +1,18 @@
-package org.example;
+package org.example.models;
 
-import interfaces.BoardOperations;
+import org.example.interfaces.BoardOperations;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class Board implements BoardOperations {
-    private final int SIZE = 3;
-    private String[][] board = new String[SIZE][SIZE];
-    private int emptyCells = SIZE * SIZE;
-    private List<Board> childBoards; // Deklarera variabeln här
-    private String lastMove;  // New attribute to keep track of the last move
+    private final int SIZE = 3; // Defines the size of the board
+    private String[][] board = new String[SIZE][SIZE]; // 2D-array that represents the board
+    private int emptyCells = SIZE * SIZE; // keeps track of empty cells
+    private List<Board> childBoards; // A list that keeps track of possible moves from the current position
+    private String lastMove;  // keeps track of the last move
 
-    // Konstruktor
+    // Constructor, game board is initialized with empty strings in every cell
     public Board() {
         for (int i = 0; i < SIZE; i++) {
             for (int j = 0; j < SIZE; j++) {
@@ -21,21 +21,24 @@ public class Board implements BoardOperations {
         }
     }
 
+    // keeps track of if a cell is empty
     @Override
     public boolean isValidMove(int row, int col) {
         return board[row][col].equals("");
     }
 
-    // New method to get the last move
+    // get the last move
     public String getLastMove() {
         return lastMove;
     }
 
-    // New method to set the last move
+    // set the last move
     public void setLastMove(int row, int col) {
         this.lastMove = "Row: " + row + ", Col: " + col;
     }
 
+
+    // places either x or o mark if cell is empty and updates lastMove and decreases the amount of emptyCells
     @Override
     public void placeMark(String mark, int row, int col) {
         if (isValidMove(row, col)) {
@@ -44,12 +47,14 @@ public class Board implements BoardOperations {
             emptyCells--;
         }
     }
-
+// checks if x or o is winner (true or false)
     @Override
     public boolean isWinner() {
         return isXWinner() || isOWinner();
     }
 
+
+    // checks if it's a draw
     @Override
     public boolean isDraw() {
         return emptyCells == 0 && !isWinner();
@@ -84,6 +89,8 @@ public class Board implements BoardOperations {
         return false;
     }
 
+
+    // returns a copy of current Board object
     @Override
     public Board copyBoard() {
         Board newBoard = new Board();
@@ -96,50 +103,19 @@ public class Board implements BoardOperations {
         return newBoard;
     }
 
+    // checks if there are empty cells in board
     @Override
     public boolean hasEmptyCells() {
         return emptyCells > 0;
     }
 
-    @Override
-    public void printBoard() {
-        for (int i = 0; i < SIZE; i++) {
-            for (int j = 0; j < SIZE; j++) {
-                System.out.print(board[i][j].equals("") ? "-" : board[i][j]);
-                if (j != SIZE - 1) {
-                    System.out.print(" | ");
-                }
-            }
-            System.out.println();
-            if (i != SIZE - 1) {
-                System.out.println("---------");
-            }
-        }
-    }
 
-
-    /**
-     * After adding a move to a copy of a board.
-     * This method should be used to add the previous one
-     */
-    @Override
-    public void setPreviousCell() {
-        // TODO: Implement this method
-    }
-
-
-    /**
-     * After creating a copy of this board. The copy should be added as next board
-     */
-    @Override
-    public void setNextBoard() {
-        // TODO: Implement this method
-    }
-
+// returns current player based on the amount of empty cells(even or odd)
     private char getCurrentPlayer() {
-        return emptyCells % 2 == 1 ? 'X' : 'O';  // Om udda tomma celler så är det X:s tur, annars O:s
+        return emptyCells % 2 == 1 ? 'X' : 'O';
     }
 
+    // creates all possible boards from current position by going through every empty cell
     @Override
     public void createPossibleChildBoards() {
         childBoards = new ArrayList<>();
@@ -156,10 +132,12 @@ public class Board implements BoardOperations {
         }
     }
 
+
+    // returns array of all childBoards, returns an empty array if childBoards is not initialized
     @Override
     public Board[] getChildBoards() {
         if (childBoards == null) {
-            return new Board[0];  // Return an empty array if childBoards is not initialized.
+            return new Board[0];
         }
         return childBoards.toArray(new Board[0]);
     }
