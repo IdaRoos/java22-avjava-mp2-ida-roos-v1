@@ -13,7 +13,7 @@ public class GameLogic {
 
     public static int minMax(Board board, int depth, boolean isMaximizing) {
         // Base case: stop if depth is 3 or if the game is over (win or draw).
-        if ( depth == 3 || board.isWinner() || board.isDraw()) {
+        if ( depth == 9 || board.isWinner() || board.isDraw()) {
             return evaluateBoard(board, depth);  // Passed depth to evaluate
         }
 
